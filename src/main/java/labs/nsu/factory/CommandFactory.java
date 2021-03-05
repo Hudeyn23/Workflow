@@ -1,11 +1,13 @@
-package labs.nsu;
+package labs.nsu.factory;
+
+import labs.nsu.commands.Command;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-class CommandFactory {
-    private Properties config = new Properties();
+public class CommandFactory {
+    private final Properties config = new Properties();
 
     private CommandFactory() throws IOException {
         var configStream = getClass().getResourceAsStream("/config/CommandFactory.config");
@@ -46,4 +48,4 @@ class CommandFactory {
         }
         return command;
     }
-    }
+}

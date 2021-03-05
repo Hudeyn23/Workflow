@@ -1,4 +1,4 @@
-package labs.nsu;
+package labs.nsu.factory;
 
 class CommandFactoryException extends Exception {
     public CommandFactoryException(String message) {
