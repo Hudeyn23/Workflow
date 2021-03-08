@@ -1,16 +1,13 @@
 package labs.nsu.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommandContext {
-    private List<String> context;
-    private  List<String> arguments;
+public class CommandContext {
+    private List<String> context = new ArrayList<>();
 
     public List<String> getContext() {
         return context;
     }
 
-    public List<String> getArguments() {
-        return arguments;
-    }
 }

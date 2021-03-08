@@ -1,6 +1,10 @@
 package labs.nsu.factory;
 
-class CommandFactoryException extends Exception {
+public class CommandFactoryException extends Exception {
+    public CommandFactoryException() {
+        super();
+    }
+
     public CommandFactoryException(String message) {
         super(message);
     }
@@ -9,11 +13,7 @@ class CommandFactoryException extends Exception {
         super(message, cause);
     }
 
-    public CommandFactoryException() {
-        super();
-    }
-
-    public CommandFactoryException(Throwable t) {
-        super(t);
+    public CommandFactoryException(Throwable cause) {
+        super(cause);
     }
 }

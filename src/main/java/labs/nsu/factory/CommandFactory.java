@@ -10,7 +10,7 @@ public class CommandFactory {
     private final Properties config = new Properties();
 
     private CommandFactory() throws IOException {
-        var configStream = getClass().getResourceAsStream("/config/CommandFactory.config");
+        var configStream = getClass().getResourceAsStream("/configs/CommandFactory.config");
         if (configStream == null) {
             throw new IOException("Unable to read config");
         }

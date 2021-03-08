@@ -2,13 +2,14 @@ package labs.nsu.commands;
 
 import java.io.*;
 
-public class ReadCommand implements Command {
-    @Override
+public class ReadCommand extends AbstractCommand {
+    AllowablePosition position = AllowablePosition.FIRST;
+
     public void execute(CommandContext context) throws CommandException {
-        if (context.getArguments().size() != 1) {
-            throw new CommandException("Incorrect number of arguments. Required 1, but in fact" + context.getArguments().size());
+        if (args.size() != 1) {
+            throw new CommandException("Incorrect number of arguments. Required 1, but in fact" + args.size());
         } else {
-            try (BufferedReader reader = new BufferedReader(new FileReader(context.getArguments().get(0)))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(args.get(0)))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     context.getContext().add(line);
@@ -18,4 +19,6 @@ public class ReadCommand implements Command {
             }
         }
     }
+
+
 }
