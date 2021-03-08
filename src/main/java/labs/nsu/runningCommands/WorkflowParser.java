@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WorkflowParser {
@@ -15,14 +16,11 @@ public class WorkflowParser {
             String line;
             line = reader.readLine();
 
-            if ((line == null) ? true : !line.equals("desc")) {
+            if (line == null || !line.equals("desc")) {
                 throw new WorkflowParserException("workflow have to starts with desc word");
             }
-            while (!(line = reader.readLine()).equals("csed") && line != null) {
+            while (!(line = reader.readLine()).equals("csed")) {
                 commandsDescription.add(line);
-            }
-            if (line == null) {
-                throw new WorkflowParserException("workflow command declaration block have to end with csed word");
             }
             String workflowStructure = reader.readLine();
             for (String s : workflowStructure.split(" -> ")) {
@@ -31,7 +29,7 @@ public class WorkflowParser {
 
 
         } catch (IOException e) {
-            throw new WorkflowParserException("Error while parsing workflow file", e);
+            throw new WorkflowParserException("Unable to open input file", e);
         }
     }
 
@@ -46,10 +44,7 @@ public class WorkflowParser {
         }
         int currentId = Integer.parseInt(words[0]);
         String currentName = words[2];
-        List<String> currentArgs = new ArrayList<>();
-        for (int i = 3; i < words.length; i++) {
-            currentArgs.add(words[i]);
-        }
+        List<String> currentArgs = new ArrayList<>(Arrays.asList(words).subList(3, words.length));
         return new Block(currentId, currentName, currentArgs);
     }
 

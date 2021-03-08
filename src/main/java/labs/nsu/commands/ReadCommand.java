@@ -1,9 +1,20 @@
 package labs.nsu.commands;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class ReadCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.FIRST;
+
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.FIRST;
+    }
+
+    @Override
+    public String toString() {
+        return "ReadCommand{}";
+    }
 
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 1) {

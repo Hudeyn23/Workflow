@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 public class CommandFactory {
+    private static volatile CommandFactory instance;
     private final Properties config = new Properties();
 
     private CommandFactory() throws IOException {
@@ -16,8 +17,6 @@ public class CommandFactory {
         }
         config.load(configStream);
     }
-
-    private static volatile CommandFactory instance;
 
     public static CommandFactory getInstance() throws IOException {
         if (instance == null) {
@@ -32,7 +31,7 @@ public class CommandFactory {
 
     public Command getCommand(String commandName) throws CommandFactoryException {
         if (!config.containsKey(commandName)) {
-            throw new CommandFactoryException("Command not found");
+            throw new CommandFactoryException("Command " + commandName + " not found");
         }
         Command command;
         try {
@@ -40,11 +39,11 @@ public class CommandFactory {
             var commandObject = commandClass.getDeclaredConstructor().newInstance();
             command = ((Command) commandObject);
         } catch (ClassNotFoundException e) {
-            throw new CommandFactoryException("Unable to find class from the config", e);
+            throw new CommandFactoryException("Unable to find class with " + commandName + " command from the config", e);
         } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            throw new CommandFactoryException("Trouble with create command instance", e);
+            throw new CommandFactoryException("Trouble with create command " + commandName + " instance", e);
         } catch (ClassCastException e) {
-            throw new CommandFactoryException("Your command class must implement command interface", e);
+            throw new CommandFactoryException("Your command " + commandName + " class must implement command interface", e);
         }
         return command;
     }

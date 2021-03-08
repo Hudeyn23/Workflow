@@ -4,8 +4,19 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 public class DumpCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.MIDDLE;
+
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.MIDDLE;
+    }
+
+    @Override
+    public String toString() {
+        return "DumpCommand{}";
+    }
+
     @Override
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 1) {

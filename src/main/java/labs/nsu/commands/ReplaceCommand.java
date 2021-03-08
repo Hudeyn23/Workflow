@@ -1,7 +1,22 @@
 package labs.nsu.commands;
 
+import java.util.logging.Logger;
+
 public class ReplaceCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.MIDDLE;
+
+
+    private static final Logger log = Logger.getLogger(ReplaceCommand.class.getName());
+
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.MIDDLE;
+    }
+
+    @Override
+    public String toString() {
+        return "ReplaceCommand{}";
+    }
+
     @Override
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 2) {

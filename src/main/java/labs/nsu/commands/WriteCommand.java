@@ -5,7 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class WriteCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.LAST;
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.LAST;
+    }
+
     @Override
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 1) {

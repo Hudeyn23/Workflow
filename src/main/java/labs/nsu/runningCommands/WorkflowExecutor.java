@@ -1,57 +1,78 @@
 package labs.nsu.runningCommands;
 
+import labs.nsu.commands.AllowablePosition;
 import labs.nsu.commands.Command;
 import labs.nsu.commands.CommandContext;
 import labs.nsu.commands.CommandException;
 import labs.nsu.factory.CommandFactory;
 import labs.nsu.factory.CommandFactoryException;
 
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.LogManager;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WorkflowExecutor {
+    private static final Logger log = Logger.getLogger(WorkflowExecutor.class.getName());
     CommandContext context = new CommandContext();
     Map<Integer, Command> commandMap = new HashMap<>();
-    private static Logger log = Logger.getLogger("WorkflowExecutor.class.getName()");
-    private static Logger log2 = Logger.getLogger(Command.class.getName());
+    private int currentStage = 0;
+
     public void execute(String fileName) throws WorkflowExecutorException {
+
         try {
-            LogManager.getLogManager().readConfiguration(
-                    getClass().getResourceAsStream("/configs/logging.properties"));
-        } catch (IOException e) {
-            System.err.println("Could not setup logger configuration: " + e.toString());
-        }
-        try {
-            log.info("Some message");
-            log2.info("Some message");
             CommandFactory factory = CommandFactory.getInstance();
             WorkflowParser parser = new WorkflowParser();
-            int commandId;
-            String commandName;
-            List<String> commandArgs;
+            log.info("start parsing workflow file");
             parser.parse(fileName);
             Block block;
             while ((block = parser.nextBlock()) != null) {
                 System.out.println(block.getName());
+                log.info("Trying to load " + block.getName() + " block from factory");
                 Command command = factory.getCommand(block.getName());
+                log.info("Command " + block.getName() + " has been successfully load");
                 for (String args : block.getArgs()) {
                     command.addArg(args);
                 }
                 commandMap.put(block.getId(), command);
             }
+            log.info("workflow file has been successfully parse");
+            log.info("Start executing commands");
             for (Integer i : parser.getCommands()) {
-                commandMap.get(i).execute(context);
+                Command command = commandMap.get(i);
+                if (command == null) {
+                    log.severe("workflow file does`t have block with id = " + i);
+                    throw new WorkflowExecutorException("There is no block with id = " + i);
+                }
+                if (!checkCommandPosition(command, parser.getCommands().size())) {
+                    log.severe("Command  " + command.toString() + "isn`t in the right position. " + "Required + " + command.getPosition());
+                    throw new WorkflowExecutorException("Incorrect commands order");
+                }
+                log.info("Trying to execute " + command.toString() + " command");
+                command.execute(context);
+                log.info("Command " + command.toString() + " is successfully executed ");
+                currentStage++;
             }
-        } catch (WorkflowParserException | CommandFactoryException | IOException | CommandException e) {
-            throw new WorkflowExecutorException("There is a trouble with workflow", e);
-
+            log.info("Workflow execution completed successfully");
+        } catch (WorkflowParserException e) {
+            log.log(Level.SEVERE, "Workflow parse error", e);
+            throw new WorkflowExecutorException("Error while parsing ", e);
+        } catch (CommandException e) {
+            log.log(Level.SEVERE, "Command error", e);
+            throw new WorkflowExecutorException("Command error", e);
+        } catch (CommandFactoryException | IOException e) {
+            log.log(Level.SEVERE, "Workflow command load error", e);
+            throw new WorkflowExecutorException("", e);
+        } finally {
+            log.info("Workflow execution completed due to error");
         }
 
+    }
+
+    boolean checkCommandPosition(Command command, int commandsCount) {
+        if (command.getPosition() == AllowablePosition.FIRST && currentStage == 0) return true;
+        if (command.getPosition() == AllowablePosition.LAST && currentStage == commandsCount - 1) return true;
+        return command.getPosition() == AllowablePosition.MIDDLE && (currentStage != 0 && currentStage != commandsCount - 1);
     }
 }

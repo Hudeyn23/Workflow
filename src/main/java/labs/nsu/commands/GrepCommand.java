@@ -1,7 +1,16 @@
 package labs.nsu.commands;
 
 public class GrepCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.MIDDLE;
+    @Override
+    public String toString() {
+        return "GrepCommand{}";
+    }
+
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.MIDDLE;
+    }
+
     @Override
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 1) {

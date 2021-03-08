@@ -1,7 +1,18 @@
 package labs.nsu.commands;
 
 public class SortCommand extends AbstractCommand {
-    AllowablePosition position = AllowablePosition.MIDDLE;
+
+
+    @Override
+    public AllowablePosition getPosition() {
+        return AllowablePosition.MIDDLE;
+    }
+
+    @Override
+    public String toString() {
+        return "SortCommand{}";
+    }
+
     @Override
     public void execute(CommandContext context) throws CommandException {
         if (args.size() != 0) {
