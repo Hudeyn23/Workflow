@@ -1,4 +1,4 @@
-package labs.nsu.runningCommands;
+package labs.nsu.executor;
 
 public class WorkflowParserException extends Exception {
     public WorkflowParserException(String message) {

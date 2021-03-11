@@ -1,8 +1,9 @@
-package labs.nsu.runningCommands;
+package labs.nsu.executor;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,8 +12,8 @@ public class WorkflowParser {
     List<String> commandsDescription = new ArrayList<>();
     List<Integer> commandsSequence = new ArrayList<>();
 
-    public void parse(String fileName) throws WorkflowParserException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+    public void parse(InputStream fileName) throws WorkflowParserException {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(fileName))) {
             String line;
             line = reader.readLine();
 

@@ -1,11 +1,9 @@
 package labs.nsu.commands;
 
-import java.util.logging.Logger;
+import java.util.List;
 
 public class ReplaceCommand extends AbstractCommand {
 
-
-    private static final Logger log = Logger.getLogger(ReplaceCommand.class.getName());
 
     @Override
     public AllowablePosition getPosition() {
@@ -18,11 +16,11 @@ public class ReplaceCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(CommandContext context) throws CommandException {
+    public void execute(List<String> context) throws CommandException {
         if (args.size() != 2) {
             throw new CommandException("Incorrect number of arguments. Required 2, but in fact" + args.size());
         } else {
-            context.getContext().replaceAll(S -> (S.replaceAll(args.get(0), args.get(1))));
+            context.replaceAll(S -> (S.replaceAll(args.get(0), args.get(1))));
         }
 
     }

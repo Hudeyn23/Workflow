@@ -1,4 +1,4 @@
-package labs.nsu.runningCommands;
+package labs.nsu.executor;
 
 public class WorkflowExecutorException extends Exception {
     public WorkflowExecutorException() {

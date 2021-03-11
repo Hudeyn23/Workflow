@@ -1,12 +1,11 @@
-package labs.nsu.runningCommands;
+package labs.nsu.executor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Block {
-    private int id;
-    private String name = null;
-    private List<String> args = new ArrayList<>();
+    private final int id;
+    private final String name;
+    private final List<String> args;
 
     public Block(int id, String name, List<String> args) {
         this.id = id;

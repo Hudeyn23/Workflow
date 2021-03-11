@@ -1,8 +1,10 @@
 package labs.nsu;
 
-import labs.nsu.runningCommands.WorkflowExecutor;
-import labs.nsu.runningCommands.WorkflowExecutorException;
+import labs.nsu.executor.WorkflowExecutor;
+import labs.nsu.executor.WorkflowExecutorException;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.LogManager;
 
@@ -16,8 +18,8 @@ public class Main {
             System.err.println("Could not setup logger configuration: " + e.toString());
         }
         try {
-            executor.execute("workflow.txt");
-        } catch (WorkflowExecutorException e) {
+            executor.execute(new FileInputStream("workflow.txt"));
+        } catch (WorkflowExecutorException | FileNotFoundException e) {
             e.printStackTrace();
         }
     }

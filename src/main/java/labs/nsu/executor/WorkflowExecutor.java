@@ -1,31 +1,33 @@
-package labs.nsu.runningCommands;
+package labs.nsu.executor;
 
 import labs.nsu.commands.AllowablePosition;
 import labs.nsu.commands.Command;
-import labs.nsu.commands.CommandContext;
 import labs.nsu.commands.CommandException;
 import labs.nsu.factory.CommandFactory;
 import labs.nsu.factory.CommandFactoryException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WorkflowExecutor {
     private static final Logger log = Logger.getLogger(WorkflowExecutor.class.getName());
-    CommandContext context = new CommandContext();
+    List<String> context = new ArrayList<>();
     Map<Integer, Command> commandMap = new HashMap<>();
     private int currentStage = 0;
 
-    public void execute(String fileName) throws WorkflowExecutorException {
+    public void execute(InputStream input) throws WorkflowExecutorException {
 
         try {
             CommandFactory factory = CommandFactory.getInstance();
             WorkflowParser parser = new WorkflowParser();
             log.info("start parsing workflow file");
-            parser.parse(fileName);
+            parser.parse(input);
             Block block;
             while ((block = parser.nextBlock()) != null) {
                 System.out.println(block.getName());
@@ -57,15 +59,16 @@ public class WorkflowExecutor {
             log.info("Workflow execution completed successfully");
         } catch (WorkflowParserException e) {
             log.log(Level.SEVERE, "Workflow parse error", e);
+            log.info("Workflow execution completed due to error");
             throw new WorkflowExecutorException("Error while parsing ", e);
         } catch (CommandException e) {
             log.log(Level.SEVERE, "Command error", e);
+            log.info("Workflow execution completed due to error");
             throw new WorkflowExecutorException("Command error", e);
         } catch (CommandFactoryException | IOException e) {
             log.log(Level.SEVERE, "Workflow command load error", e);
-            throw new WorkflowExecutorException("", e);
-        } finally {
             log.info("Workflow execution completed due to error");
+            throw new WorkflowExecutorException("", e);
         }
 
     }
@@ -75,4 +78,5 @@ public class WorkflowExecutor {
         if (command.getPosition() == AllowablePosition.LAST && currentStage == commandsCount - 1) return true;
         return command.getPosition() == AllowablePosition.MIDDLE && (currentStage != 0 && currentStage != commandsCount - 1);
     }
+
 }
