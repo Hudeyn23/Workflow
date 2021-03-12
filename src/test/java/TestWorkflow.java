@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestWorkflow {
     private static List<String> context;
@@ -35,12 +33,6 @@ public class TestWorkflow {
         context = new ArrayList<>();
     }
 
-    @Test
-    void wrongCommandExceptionTest() {
-        String wrongCommand = "newCommand";
-        Throwable thrown = assertThrows(CommandFactoryException.class, () -> CommandFactory.getInstance().getCommand(wrongCommand));
-        assertNotNull(thrown.getMessage());
-    }
 
     @Test
     void readTest() throws CommandException, IOException, CommandFactoryException {
